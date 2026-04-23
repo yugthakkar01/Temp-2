@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Git Explain Demo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main>
+    <h1>Git Explain</h1>
+    <p>Click the button to fetch a message from the backend.</p>
+    <button id="fetchButton">Fetch backend message</button>
+    <div id="response" class="response">No data fetched yet.</div>
+  </main>
+
+  <script>
+    const button = document.getElementById('fetchButton');
+    const responseDiv = document.getElementById('response');
+
+    button.addEventListener('click', async () => {
+      responseDiv.textContent = 'Loading...';
+
+      try {
+        const res = await fetch('http://localhost:3000/api/message');
+        if (!res.ok) {
+          throw new Error(`Server returned ${res.status}`);
+        }
+
+        const data = await res.json();
+        responseDiv.textContent = `Backend says: ${data.message} (at ${data.timestamp})`;
+      } catch (error) {
+        responseDiv.textContent = `Error: ${error.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
